@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { evaluate } from 'mathjs';
 
-interface Variable {
+export interface Variable {
   name: string;
   category: string;
   value?: string | number;
@@ -11,11 +11,15 @@ interface Variable {
 interface VariableStore {
   categories: { [key: string]: Variable[] };
   currentCategory: string;
-  setCurrentCategory: (category: string) => void;
+  editingCategory: string | null;
   evaluateFormula: (formula: string) => number | string;
+  addCategory: (tempName: string) => void;
+  updateCategoryName: (oldName: string, newName: string) => void;
+  deleteCategory: (name: string) => void;
+  setEditingCategory: (category: string | null) => void;
 }
 
-const useVariableStore = create<VariableStore>((set, get) => ({
+export const useVariableStore = create<VariableStore>((set, get) => ({
   categories: {
     Sales: [
       { name: 'revenue', category: 'Sales', value: 12000, id: '1' },
@@ -32,12 +36,11 @@ const useVariableStore = create<VariableStore>((set, get) => ({
     ],
   },
   currentCategory: 'Sales',
-  setCurrentCategory: (category: string) => set({ currentCategory: category }),
+  editingCategory: null,
   evaluateFormula: (formula: string) => {
     const allVariables = Object.values(get().categories).flat();
 
     const variableMap = new Map<string, Variable>();
-
     allVariables.forEach(variable => {
       variableMap.set(variable.id, variable);
     });
@@ -46,7 +49,6 @@ const useVariableStore = create<VariableStore>((set, get) => ({
       if (typeof value === 'number') {
         return value;
       }
-
       if (typeof value === 'string') {
         try {
           const resolvedFormula = resolveFormula(value);
@@ -56,18 +58,15 @@ const useVariableStore = create<VariableStore>((set, get) => ({
           return NaN;
         }
       }
-
       return NaN;
     };
 
     const resolveFormula = (formula: string): string => {
       return formula.replace(/#(\w+)/g, (match, id) => {
         const variable = variableMap.get(id);
-
         if (!variable) {
           return match;
         }
-
         const resolvedValue = resolveValue(variable.value);
 
         return isNaN(resolvedValue) ? '0' : resolvedValue.toString();
@@ -75,9 +74,53 @@ const useVariableStore = create<VariableStore>((set, get) => ({
     };
 
     const resolvedFormula = resolveFormula(formula);
-
     return evaluate(resolvedFormula);
   },
-}));
+  addCategory: (tempName: string) =>
+    set(state => ({
+      categories: {
+        ...state.categories,
+        [tempName]: [],
+      },
 
-export { useVariableStore, type Variable };
+      editingCategory: tempName,
+    })),
+  updateCategoryName: (oldName: string, newName: string) =>
+    set(state => {
+      if (!state.categories[oldName] || state.categories[newName]) {
+        return state;
+      }
+
+      const newCategories = { ...state.categories };
+
+      newCategories[newName] = newCategories[oldName].map(variable => ({
+        ...variable,
+        category: newName,
+      }));
+
+      delete newCategories[oldName];
+
+      return {
+        categories: newCategories,
+        currentCategory: state.currentCategory === oldName ? newName : state.currentCategory,
+        editingCategory: null,
+      };
+    }),
+  deleteCategory: (name: string) =>
+    set(state => {
+      if (!state.categories[name]) {
+        return state;
+      }
+
+      const newCategories = { ...state.categories };
+
+      delete newCategories[name];
+
+      return {
+        categories: newCategories,
+        currentCategory: state.currentCategory === name ? '' : state.currentCategory,
+        editingCategory: null,
+      };
+    }),
+  setEditingCategory: (category: string | null) => set({ editingCategory: category }),
+}));
