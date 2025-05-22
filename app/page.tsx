@@ -20,7 +20,7 @@ import { useVariableStore, Variable } from '@/store/variables';
 import { Badge } from '@/components/ui/badge';
 
 const Home = () => {
-  const { categories } = useVariableStore();
+  const { categories, evaluateFormula } = useVariableStore();
 
   return (
     <main className="w-full h-full flex flex-col items-center justify-center gap-2">
@@ -44,11 +44,13 @@ const Home = () => {
                 <TableBody>
                   {variables.map((variable: Variable) => (
                     <TableRow key={variable.id}>
-                      <TableCell className="w-[33%] border-r">
-                        <Badge variant="secondary">{variable.name}</Badge>
-                      </TableCell>
+                      <TableCell className="w-[33%] border-r">{variable.name}</TableCell>
 
-                      <TableCell className="w-[67%]">{variable.value || 'Not set'}</TableCell>
+                      <TableCell className="w-[67%]">
+                        {typeof variable.value === 'string'
+                          ? evaluateFormula(variable.value)
+                          : variable.value || 'Not set'}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
