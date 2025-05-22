@@ -24,7 +24,7 @@ const useVariableStore = create<VariableStore>((set, get) => ({
     ],
     Marketing: [
       { name: 'revenue', category: 'Marketing', value: 3000, id: '4' },
-      { name: 'clicks', category: 'Marketing', value: 150, id: '5' },
+      { name: 'clicks', category: 'Marketing', id: '5' },
     ],
     Operations: [
       { name: 'stock', category: 'Operations', value: 400, id: '6' },

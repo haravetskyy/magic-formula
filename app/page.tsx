@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { TypographyH1 } from '@/components/ui/typography';
+import { TypographyH1, TypographyMuted } from '@/components/ui/typography';
 import {
   Table,
   TableBody,
@@ -44,12 +44,14 @@ const Home = () => {
                 <TableBody>
                   {variables.map((variable: Variable) => (
                     <TableRow key={variable.id}>
-                      <TableCell className="w-[33%] border-r">{variable.name}</TableCell>
+                      <TableCell className="w-[33%] border-r">
+                        <Badge variant="secondary">{variable.name}</Badge>
+                      </TableCell>
 
                       <TableCell className="w-[67%]">
                         {typeof variable.value === 'string'
                           ? evaluateFormula(variable.value)
-                          : variable.value || 'Not set'}
+                          : variable.value || <TypographyMuted>Not set</TypographyMuted>}
                       </TableCell>
                     </TableRow>
                   ))}
