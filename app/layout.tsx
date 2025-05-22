@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Magic Formula",
-  description: "A small app for basic math operations",
+  title: 'Magic Formula',
+  description: 'A small app for basic math operations',
 };
 
 export default function RootLayout({
@@ -13,11 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`w-svw h-svh antialiased`}>{children}</body>
     </html>
   );
 }
