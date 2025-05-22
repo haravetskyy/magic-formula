@@ -2,8 +2,7 @@
 
 import React, { useReducer, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { useVariableStore } from '@/store/variables';
-import { useCategoryStore } from '@/store';
+import { useCategoryStore } from '@/store/categories';
 
 interface CategoryNameEditorProps {
   category: string;
@@ -51,6 +50,7 @@ const CategoryNameEditor = ({ category }: CategoryNameEditorProps) => {
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
+      inputRef.current.select();
     }
   }, [isEditing]);
 
@@ -93,7 +93,7 @@ const CategoryNameEditor = ({ category }: CategoryNameEditorProps) => {
     />
   ) : (
     <span className="text-left cursor-pointer hover:underline" onClick={handleEdit}>
-      {category}
+      {state.name || category}
     </span>
   );
 };

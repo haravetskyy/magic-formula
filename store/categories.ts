@@ -11,8 +11,8 @@ interface CategoryStore {
 }
 
 export const useCategoryStore = create<CategoryStore>(set => ({
-  categories: ['Sales', 'Marketing', 'Operations'],
-  currentCategory: 'Sales',
+  categories: [],
+  currentCategory: '',
   editingCategory: null,
   addCategory: (tempName: string) =>
     set(state => ({

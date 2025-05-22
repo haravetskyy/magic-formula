@@ -15,7 +15,7 @@ const AddCategoryButton = () => {
 
   return (
     <Button onClick={handleAddCategory} className="my-4">
-      Add Category
+      + Add Category
     </Button>
   );
 };

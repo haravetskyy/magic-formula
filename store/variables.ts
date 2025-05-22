@@ -13,19 +13,12 @@ interface VariableStore {
   addVariable: (category: string, name: string, value: string | number, id: string) => void;
   updateVariable: (id: string, name: string, value: string | number) => void;
   deleteVariable: (id: string) => void;
+  deleteVariablesByCategory: (category: string) => void;
   evaluateFormula: (formula: string) => number | string;
 }
 
 export const useVariableStore = create<VariableStore>((set, get) => ({
-  variables: [
-    { name: 'revenue', category: 'Sales', value: 12000, id: '1' },
-    { name: 'expenses', category: 'Sales', value: 5000, id: '2' },
-    { name: 'profit', category: 'Sales', value: '=#1 - #2', id: '3' },
-    { name: 'revenue', category: 'Marketing', value: 3000, id: '4' },
-    { name: 'clicks', category: 'Marketing', value: 150, id: '5' },
-    { name: 'stock', category: 'Operations', value: 400, id: '6' },
-    { name: 'shipments', category: 'Operations', value: '=100 + 200', id: '7' },
-  ],
+  variables: [],
   addVariable: (category, name, value, id) =>
     set(state => ({
       variables: [...state.variables, { name, category, value, id }],
@@ -42,6 +35,10 @@ export const useVariableStore = create<VariableStore>((set, get) => ({
   deleteVariable: id =>
     set(state => ({
       variables: state.variables.filter(v => v.id !== id),
+    })),
+  deleteVariablesByCategory: category =>
+    set(state => ({
+      variables: state.variables.filter(v => v.category !== category),
     })),
   evaluateFormula: (formula: string) => {
     if (!formula.startsWith('=')) {
@@ -90,3 +87,4 @@ export const useVariableStore = create<VariableStore>((set, get) => ({
     }
   },
 }));
+
