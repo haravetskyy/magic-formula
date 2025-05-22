@@ -1,15 +1,16 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useVariableStore } from '@/store/variables';
+import { useCategoryStore } from '@/store/categories';
+import { v4 as uuidv4 } from 'uuid';
 
 const AddCategoryButton = () => {
-  const { addCategory, setEditingCategory } = useVariableStore();
+  const { addCategory, setEditingCategory } = useCategoryStore();
 
   const handleAddCategory = () => {
-    addCategory('');
-
-    setEditingCategory('');
+    const tempName = uuidv4();
+    addCategory(tempName);
+    setEditingCategory(tempName);
   };
 
   return (

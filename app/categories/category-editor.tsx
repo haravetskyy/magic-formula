@@ -3,6 +3,7 @@
 import React, { useReducer, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { useVariableStore } from '@/store/variables';
+import { useCategoryStore } from '@/store';
 
 interface CategoryNameEditorProps {
   category: string;
@@ -39,7 +40,7 @@ const reducer = (state: State, action: Action): State => {
 
 const CategoryNameEditor = ({ category }: CategoryNameEditorProps) => {
   const { updateCategoryName, deleteCategory, editingCategory, setEditingCategory } =
-    useVariableStore();
+    useCategoryStore();
   const [state, dispatch] = useReducer(reducer, {
     name: category.includes('-') ? '' : category,
     isNewCategory: category.includes('-'),

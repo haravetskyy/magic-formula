@@ -2,8 +2,8 @@
 
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { CategoryNameEditor } from './category-editor';
-import { type Variable } from '@/store/variables';
 import { VariableTable } from '../variables/variable-table';
+import { Variable } from '@/store/variables';
 
 interface CategoryItemProps {
   category: string;
@@ -18,10 +18,10 @@ const CategoryItem = ({ category, variables }: CategoryItemProps) => {
       </AccordionTrigger>
 
       <AccordionContent>
-        <VariableTable variables={variables} />
+        <VariableTable category={category} variables={variables} />
       </AccordionContent>
     </AccordionItem>
   );
 };
 
-export default CategoryItem;
+export { CategoryItem };
